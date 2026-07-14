@@ -1,0 +1,11 @@
+Incident ID,Alert Name,Priority,Severity,Timestamp,Source IP,Destination IP,Automated Response,Status
+10,[1:2000003:1] Network Reconnaissance Detected,3,LOW,07/14-14:25:45.987654,192.168.1.80,192.168.1.10,Record the alert for source IP 192.168.1.80 and continue monitoring.,INVESTIGATING
+9,[1:2000002:1] Suspicious PowerShell Execution,1,HIGH,07/14-14:22:35.654321,192.168.1.25,192.168.1.10,"Recommend blocking source IP 192.168.1.25, create a high-priority incident, and notify the security analyst.",OPEN
+8,[1:2000001:1] Multiple Failed Login Attempts,2,MEDIUM,07/14-14:20:10.123456,192.168.1.105,192.168.1.10,Add source IP 192.168.1.105 to the watchlist and investigate additional activity.,OPEN
+7,[1:1000003:1] Suspicious SSH Connection,1,HIGH,07/14-12:32:25.987654,192.168.1.70,192.168.1.10,"Recommend blocking source IP 192.168.1.70, create a high-priority incident, and notify the security analyst.",OPEN
+6,[1:1000002:1] Possible Port Scan Detected,2,MEDIUM,07/14-12:31:20.654321,192.168.1.60,192.168.1.10,Add source IP 192.168.1.60 to the watchlist and investigate additional activity.,OPEN
+5,[1:1000001:1] ICMP Ping Detected,3,LOW,07/14-12:30:15.123456,192.168.1.50,192.168.1.10,Record the alert for source IP 192.168.1.50 and continue monitoring.,RESOLVED
+4,[1:1000003:1] Suspicious SSH Connection,1,HIGH,07/14-12:32:25.987654,192.168.1.70,192.168.1.10,"Recommend blocking source IP 192.168.1.70, create a high-priority incident, and notify the security analyst.",OPEN
+3,[1:1000002:1] Possible Port Scan Detected,2,MEDIUM,07/14-12:31:20.654321,192.168.1.60,192.168.1.10,Add source IP 192.168.1.60 to the watchlist and investigate additional activity.,OPEN
+2,[1:1000001:1] ICMP Ping Detected,3,LOW,07/14-12:30:15.123456,192.168.1.50,192.168.1.10,Record the alert for source IP 192.168.1.50 and continue monitoring.,OPEN
+1,Suspicious SSH Connection,1,HIGH,07/14-12:32:25.987654,192.168.1.70,192.168.1.10,Recommend blocking source IP and notify security analyst.,OPEN

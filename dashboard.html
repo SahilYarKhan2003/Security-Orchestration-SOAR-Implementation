@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mini SOAR Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #eef2f7;
+        }
+
+        .header {
+            background: #17202a;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .container {
+            width: 95%;
+            margin: 25px auto;
+        }
+
+        .cards {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .HIGH {
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        .MEDIUM {
+            color: #d68910;
+            font-weight: bold;
+        }
+
+        .LOW {
+            color: #1e8449;
+            font-weight: bold;
+        }
+
+        .status-open {
+            font-weight: bold;
+        }
+
+        .status-investigating {
+            font-weight: bold;
+        }
+
+        .status-resolved {
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .action-buttons form {
+            margin: 0;
+        }
+
+        button {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .investigate-button {
+            background: #f39c12;
+            color: white;
+        }
+
+        .resolve-button {
+            background: #27ae60;
+            color: white;
+        }
+
+        .reopen-button {
+            background: #2980b9;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="header">
+
+    <h1>MINI SOAR SECURITY DASHBOARD</h1>
+
+    <p>Security Orchestration, Automation and Response</p>
+
+</div>
+
+
+<div class="container">
+
+    <!-- INCIDENT STATISTICS -->
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Incidents</h3>
+            <h2>{{ total_incidents }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>High Severity</h3>
+            <h2>{{ high_count }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Medium Severity</h3>
+            <h2>{{ medium_count }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Low Severity</h3>
+            <h2>{{ low_count }}</h2>
+        </div>
+
+    </div>
+
+
+    <!-- INCIDENT TABLE -->
+
+    <h2>Security Incidents</h2>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Alert Name</th>
+            <th>Priority</th>
+            <th>Severity</th>
+            <th>Timestamp</th>
+            <th>Source IP</th>
+            <th>Destination IP</th>
+            <th>Automated Response</th>
+            <th>Status</th>
+            <th>Incident Actions</th>
+        </tr>
+
+
+        {% for incident in incidents %}
+
+        <tr>
+
+            <td>{{ incident[0] }}</td>
+
+            <td>{{ incident[1] }}</td>
+
+            <td>{{ incident[2] }}</td>
+
+
+            <td class="{{ incident[3] }}">
+                {{ incident[3] }}
+            </td>
+
+
+            <td>{{ incident[4] }}</td>
+
+            <td>{{ incident[5] }}</td>
+
+            <td>{{ incident[6] }}</td>
+
+            <td>{{ incident[7] }}</td>
+
+
+            <!-- DISPLAY CURRENT INCIDENT STATUS -->
+
+            <td>
+
+                {% if incident[8] == "OPEN" %}
+
+                    <span class="status-open">
+                        OPEN
+                    </span>
+
+                {% elif incident[8] == "INVESTIGATING" %}
+
+                    <span class="status-investigating">
+                        INVESTIGATING
+                    </span>
+
+                {% elif incident[8] == "RESOLVED" %}
+
+                    <span class="status-resolved">
+                        RESOLVED
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+
+            <!-- INCIDENT MANAGEMENT BUTTONS -->
+
+            <td>
+
+                <div class="action-buttons">
+
+
+                    {% if incident[8] == "OPEN" %}
+
+                    <form
+                        action="{{ url_for(
+                            'update_status',
+                            incident_id=incident[0],
+                            new_status='INVESTIGATING'
+                        ) }}"
+                        method="POST">
+
+                        <button
+                            class="investigate-button"
+                            type="submit">
+
+                            Investigate
+
+                        </button>
+
+                    </form>
+
+
+                    <form
+                        action="{{ url_for(
+                            'update_status',
+                            incident_id=incident[0],
+                            new_status='RESOLVED'
+                        ) }}"
+                        method="POST">
+
+                        <button
+                            class="resolve-button"
+                            type="submit">
+
+                            Resolve
+
+                        </button>
+
+                    </form>
+
+
+                    {% elif incident[8] == "INVESTIGATING" %}
+
+
+                    <form
+                        action="{{ url_for(
+                            'update_status',
+                            incident_id=incident[0],
+                            new_status='RESOLVED'
+                        ) }}"
+                        method="POST">
+
+                        <button
+                            class="resolve-button"
+                            type="submit">
+
+                            Resolve
+
+                        </button>
+
+                    </form>
+
+
+                    <form
+                        action="{{ url_for(
+                            'update_status',
+                            incident_id=incident[0],
+                            new_status='OPEN'
+                        ) }}"
+                        method="POST">
+
+                        <button
+                            class="reopen-button"
+                            type="submit">
+
+                            Reopen
+
+                        </button>
+
+                    </form>
+
+
+                    {% elif incident[8] == "RESOLVED" %}
+
+
+                    <form
+                        action="{{ url_for(
+                            'update_status',
+                            incident_id=incident[0],
+                            new_status='OPEN'
+                        ) }}"
+                        method="POST">
+
+                        <button
+                            class="reopen-button"
+                            type="submit">
+
+                            Reopen
+
+                        </button>
+
+                    </form>
+
+
+                    {% endif %}
+
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+
+</html>
